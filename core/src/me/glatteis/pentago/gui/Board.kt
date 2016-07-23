@@ -97,8 +97,8 @@ class Board(val tileWidth: Int, val width: Int, val height: Int) : Stage(), Scre
         val timer = Timer()
         timer.scheduleTask(object : Timer.Task(){
             override fun run() {
-                PentagoCore.instance.screen = NewGameMenu
-                NewGameMenu.displayWonPopup(player)
+                PentagoCore.instance.screen = NewGameMenu()
+                (PentagoCore.instance.screen as NewGameMenu).displayWonPopup(player)
             }
         }, 2F)
     }

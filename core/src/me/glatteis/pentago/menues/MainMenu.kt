@@ -30,7 +30,7 @@ object MainMenu : MenuStage() {
         val newGame = Button(Label("New Game", labelStyle), buttonStyle)
         newGame.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                PentagoCore.instance.screen = NewGameMenu
+                PentagoCore.instance.screen = NewGameMenu()
             }
         })
         newGame.setPosition(0F, 400F, Align.center)

@@ -25,7 +25,7 @@ import java.util.*
 /**
  * Created by Linus on 23.07.2016!
  */
-object NewGameMenu : MenuStage() {
+class NewGameMenu : MenuStage() {
 
     init {
         PentagoCore.connector = LocalConnector()
@@ -117,8 +117,9 @@ object NewGameMenu : MenuStage() {
                 Label.LabelStyle(Textures.montserratSmall, Color.BLACK)), buttonStyle)
         openToWifiButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                (PentagoCore.connector as LocalConnector).connection.createServer()
-                (openToWifiButton.children[0] as Label).setText("This game is open on WiFi")
+                val uuid = UUID.randomUUID()
+                (PentagoCore.connector as LocalConnector).connection.createServer(uuid)
+                (openToWifiButton.children[0] as Label).setText("Your UUID is $uuid")
             }
         })
         openToWifiButton.setPosition(200F, -600F, Align.left)

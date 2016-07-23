@@ -11,12 +11,17 @@ import me.glatteis.pentago.logic.RotateDirection
 
 //Packets that go from server to clients
 
-class AddDisplayedGUIChip(subtileX: Int, subtileY: Int, x: Int, y: Int, chip: GUIChip)
-class SetTurnColor(color: Color)
-class RotateSubtile(subtileX: Int, subtileY: Int, direction: RotateDirection)
-class DisplayGameWon(player: Player)
+class AddDisplayedGUIChip(val subtileX: Int, val subtileY: Int, val x: Int, val y: Int, val chip: GUIChip)
+class SetTurnColor(val color: Color)
+class RotateSubtile(val subtileX: Int, val subtileY: Int, val direction: RotateDirection)
+class DisplayGameWon(val player: Player)
 
 //Packets that go from clients to server
 
-class HandleInput(subtileX: Int, subtileY: Int, tileXRelative: Int, tileYRelative: Int)
-class HandleTurn(subtileX: Int, subtileY: Int, touchRotation: RotateDirection)
+class HandleInput(val subtileY: Int, val subtileX: Int, val tileXRelative: Int, val tileYRelative: Int)
+class HandleTurn(val subtileX: Int, val subtileY: Int, val touchRotation: RotateDirection)
+
+//Packets for discovery
+
+class WhatsYourName
+class MyNameIs(val name: String)
