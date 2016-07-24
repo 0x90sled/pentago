@@ -34,6 +34,7 @@ class Connection {
         server.addListener(object : Listener() {
             override fun received(connection: KryoConnection, any: Any?) {
                 any ?: return
+                println("Recieved $any from $connection")
                 with(any) {
                     if (this is HandleInput) {
                         PentagoCore.logic.handleInput(subtileX, subtileY, tileXRelative, tileYRelative)
@@ -109,33 +110,6 @@ class LocalConnector : Connector {
 class ClientConnector() : Connector {
 
     val client = Client()
-
-    fun searchServers(callback: (Pair<String, InetAddress>) -> Unit) {
-        client.start()
-        val hosts = client.discoverHosts(udpPort, 5000)
-        client.stop()
-        for (host in hosts) {
-            val clientForThis = Client()
-            clientForThis.start()
-            clientForThis.addListener(object : Listener() {
-                override fun received(connection: KryoConnection, any: Any?) {
-                    any ?: return
-                    if (any is MyNameIs) {
-                        callback(Pair(any.name, host))
-                    }
-                }
-            })
-            clientForThis.sendTCP(WhatsYourName())
-            val timer = Timer()
-            timer.scheduleTask(object : Timer.Task() {
-                override fun run() {
-                    clientForThis.stop()
-                    clientForThis.dispose()
-                }
-            }, 5F)
-        }
-
-    }
 
     fun connectToServer(ip: String) {
         client.connect(5000, ip, tcpPort)

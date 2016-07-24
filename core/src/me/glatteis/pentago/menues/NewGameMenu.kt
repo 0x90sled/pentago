@@ -110,7 +110,7 @@ class NewGameMenu : MenuStage() {
         val boardSizeDropdown = SelectBox<String>(boxStyle)
         boardSizeDropdown.items = Array(arrayOf("2x2", "3x3", "4x4"))
         boardSizeDropdown.width = 200F
-        boardSizeDropdown.setPosition(-400F, -600F, Align.right)
+        boardSizeDropdown.setPosition(-400F, -600F, Align.center)
         addActor(boardSizeDropdown)
 
         val openToWifiButton = Button(Label("Open this game to WiFi",
@@ -122,8 +122,7 @@ class NewGameMenu : MenuStage() {
                 (openToWifiButton.children[0] as Label).setText("Your UUID is $uuid")
             }
         })
-        openToWifiButton.setPosition(200F, -600F, Align.left)
-
+        openToWifiButton.setPosition(200F, -500F, Align.center)
         addActor(openToWifiButton)
 
         val playButton = Button(Label("Play", labelStyle), Button.ButtonStyle())

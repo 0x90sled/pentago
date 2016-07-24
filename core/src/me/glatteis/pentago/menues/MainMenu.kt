@@ -38,6 +38,11 @@ object MainMenu : MenuStage() {
 
         val joinNetworkGame = Button(Label("Join Network Game", labelStyle), buttonStyle)
         joinNetworkGame.setPosition(0F, 0F, Align.center)
+        joinNetworkGame.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                PentagoCore.instance.screen = ConnectMenu()
+            }
+        })
         addActor(joinNetworkGame)
 
         val options = Button(Label("Options", labelStyle), buttonStyle)
