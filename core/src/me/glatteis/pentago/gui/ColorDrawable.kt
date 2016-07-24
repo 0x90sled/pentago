@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 /**
  * Created by Linus on 23.07.2016!
  */
-class ColorDrawable(val color: Color) : BaseDrawable() {
+class ColorDrawable(var color: Color) : BaseDrawable() {
     val textureRegion = TextureRegion(Texture(Gdx.files.internal("textures/white_pixel.png")))
     override fun draw(batch: Batch?, x: Float, y: Float, width: Float, height: Float) {
         batch ?: return

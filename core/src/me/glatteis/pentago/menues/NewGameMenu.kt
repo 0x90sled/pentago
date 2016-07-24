@@ -149,8 +149,8 @@ class NewGameMenu : MenuStage() {
                     "4x4" -> size = 4
                     else -> size = 2
                 }
-                (PentagoCore.connector as LocalConnector).connection.startGame(size, size)
-                PentagoCore.board = Board(3, size, size, this@NewGameMenu)
+                (PentagoCore.connector as LocalConnector).connection.startGame(size, size, players.toTypedArray())
+                PentagoCore.board = Board(3, size, size, this@NewGameMenu, players.toTypedArray())
                 PentagoCore.logic = GameLogic(3, size, size, players, 5)
                 PentagoCore.instance.screen = PentagoCore.board
             }

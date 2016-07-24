@@ -5,14 +5,18 @@ import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import me.glatteis.pentago.PentagoCore
@@ -20,12 +24,11 @@ import me.glatteis.pentago.logic.Player
 import me.glatteis.pentago.logic.RotateDirection
 import me.glatteis.pentago.menues.MenuStage
 import me.glatteis.pentago.menues.NewGameMenu
-import java.util.*
 
 /**
  * Created by Linus on 21.07.2016!
  */
-class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: MenuStage) : Stage(), Screen {
+class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: MenuStage, val players: Array<Player>) : Stage(), Screen {
 
     val subtiles = Array(width, {
         Array(height, {
@@ -33,13 +36,14 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
         })
     })
 
-    val boardGroup = Group()
-    val popupGroup = Group()
+    val playerDisplay = VerticalGroup()
 
     val subtileWidth = subtiles[0][0].pixelWidth
 
     val pixelWidth = subtileWidth * width + GUIConstants.subtileGap * (width - 1)
     val pixelHeight = subtileWidth * height + GUIConstants.subtileGap * (height - 1)
+    val sidebarWidth = 200F
+
     val multiplexer = InputMultiplexer()
 
     init {
@@ -54,15 +58,22 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
             val subtile = subtiles[x][y]
             subtile.thisX = x
             subtile.thisY = y
-            boardGroup.addActor(subtile)
-            subtile.setPosition(x * subtileWidth - pixelWidth / 2 + subtileWidth / 2 + if (x == 0) 0 else GUIConstants.subtileGap * x,
+            addActor(subtile)
+            subtile.setPosition(x * subtileWidth - pixelWidth / 2 + subtileWidth / 2 - sidebarWidth / 2
+                    + if (x == 0) 0 else GUIConstants.subtileGap * x,
                     y * subtileWidth - pixelHeight / 2 + subtileWidth / 2 + if (y == 0) 0 else GUIConstants.subtileGap * y)
             subtile.setOrigin(subtile.width / 2, subtile.height / 2)
         }
 
-        viewport = ExtendViewport(pixelWidth, pixelHeight)
-        addActor(boardGroup)
-        addActor(popupGroup)
+        viewport = ExtendViewport(pixelWidth + sidebarWidth, pixelHeight)
+
+        initPlayerList()
+        playerDisplay.debugAll()
+        val scrollPane = ScrollPane(playerDisplay)
+        scrollPane.width = sidebarWidth
+        scrollPane.height = pixelHeight
+        scrollPane.setPosition(pixelWidth / 2 + sidebarWidth / 2, 0F, Align.right)
+        addActor(scrollPane)
     }
 
     fun rotateSubtile(x: Int, y: Int, direction: RotateDirection) {
@@ -71,8 +82,7 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
         subtile.addAction(Actions.rotateBy(degrees, 1F, Interpolation.pow2))
     }
 
-    fun turn(color: Color) {
-        println("Turning $color")
+    fun setTurnColor(color: Color) {
         addAction(object : Action() {
             val r = PentagoCore.backgroundColor.r
             val g = PentagoCore.backgroundColor.g
@@ -93,10 +103,21 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
         })
     }
 
+    fun selectPlayer(player: Player) {
+
+    }
+
+    fun initPlayerList() {
+        for (player in players) {
+            val label = Label(player.name, Label.LabelStyle(Textures.montserratSmall, Color.BLACK))
+            playerDisplay.addActor(label)
+        }
+    }
+
     fun displayGameWon(player: Player) {
-        turn(Color.valueOf("FFFFFF"))
+        setTurnColor(Color.valueOf("FFFFFF"))
         val timer = Timer()
-        timer.scheduleTask(object : Timer.Task(){
+        timer.scheduleTask(object : Timer.Task() {
             override fun run() {
                 PentagoCore.instance.screen = oldMenu
                 if (oldMenu is NewGameMenu) {
@@ -105,6 +126,7 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
             }
         }, 2F)
     }
+
 
     override fun show() {
         Gdx.input.inputProcessor = multiplexer

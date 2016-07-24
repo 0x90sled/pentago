@@ -49,9 +49,9 @@ class Connection {
         })
     }
 
-    fun setTurnColor(color: Color) {
-        (PentagoCore.connector as LocalConnector).setTurnColor(color)
-        sendPacketToAll(SetTurnColor(color))
+    fun setTurnPlayer(player: Player) {
+        (PentagoCore.connector as LocalConnector).setTurnPlayer(player)
+        sendPacketToAll(SetTurnPlayer(player))
     }
 
     fun addDisplayedGUIChip(subtileX: Int, subtileY: Int, x: Int, y: Int, chip: GUIChip) {
@@ -70,8 +70,8 @@ class Connection {
 
     }
 
-    fun startGame(width: Int, height: Int) {
-        sendPacketToAll(LetsGo(width, height))
+    fun startGame(width: Int, height: Int, players: Array<Player>) {
+        sendPacketToAll(LetsGo(width, height, players))
     }
 
     fun sendPacketToAll(packet: Any) {
@@ -111,8 +111,9 @@ class LocalConnector : Connector {
         PentagoCore.board.subtiles[subtileX][subtileY].addDisplayedGUIChip(x, y, chip)
     }
 
-    fun setTurnColor(color: Color) {
-        PentagoCore.board.turn(color)
+    fun setTurnPlayer(player: Player) {
+        PentagoCore.board.setTurnColor(player.color)
+        PentagoCore.board.selectPlayer(player)
     }
 
     fun rotateSubtile(subtileX: Int, subtileY: Int, direction: RotateDirection) {
@@ -143,9 +144,10 @@ class ClientConnector() : Connector {
                                 PentagoCore.board.subtiles[subtileX][subtileY].addDisplayedGUIChip(x, y, GUIChip(chipColor))
                             }
                         }
-                        is SetTurnColor -> {
+                        is SetTurnPlayer -> {
                             postRunnable {
-                                PentagoCore.board.turn(color)
+                                PentagoCore.board.setTurnColor(player.color)
+                                PentagoCore.board.selectPlayer(player)
                             }
                         }
                         is RotateSubtile -> {
@@ -160,7 +162,7 @@ class ClientConnector() : Connector {
                         }
                         is LetsGo -> {
                             postRunnable {
-                                PentagoCore.board = Board(3, this.width, this.height, WaitMenu())
+                                PentagoCore.board = Board(3, this.width, this.height, WaitMenu(), players)
                                 PentagoCore.instance.screen = PentagoCore.board
                             }
                         }

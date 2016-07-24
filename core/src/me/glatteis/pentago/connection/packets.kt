@@ -22,8 +22,8 @@ class AddDisplayedGUIChip(var subtileX: Int, var subtileY: Int, var x: Int, var 
     constructor() : this(0, 0, 0, 0, Color())
 }
 
-class SetTurnColor(var color: Color) {
-    constructor() : this(Color.WHITE)
+class SetTurnPlayer(var player: Player) {
+    constructor() : this(Player(Color(), ""))
 }
 
 class RotateSubtile(var subtileX: Int, var subtileY: Int, var direction: RotateDirection) {
@@ -34,8 +34,8 @@ class DisplayGameWon(var player: Player) {
     constructor() : this(Player(Color.WHITE, ""))
 }
 
-class LetsGo(var width: Int, var height: Int) {
-    constructor() : this(0, 0)
+class LetsGo(var width: Int, var height: Int, val players: Array<Player>) {
+    constructor() : this(0, 0, emptyArray())
 }
 
 //Packets that go from clients to server
@@ -62,7 +62,7 @@ class MyNameIs() {
 object PacketRegistrar {
     fun registerPacketsFor(endpoint: EndPoint) {
         val kryo = endpoint.kryo
-        val classes = listOf(AddDisplayedGUIChip::class.java, SetTurnColor::class.java, RotateSubtile::class.java,
+        val classes = listOf(AddDisplayedGUIChip::class.java, SetTurnPlayer::class.java, RotateSubtile::class.java,
                 DisplayGameWon::class.java, LetsGo::class.java, HandleInput::class.java, HandleTurn::class.java,
                 WhatsYourName::class.java, MyNameIs::class.java, RotateDirection::class.java, Color::class.java,
                 Player::class.java, UUID::class.java)

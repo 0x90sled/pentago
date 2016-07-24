@@ -22,10 +22,8 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         }
     }
 
-
-
     init {
-        connection.setTurnColor(players[turnPlayer].color)
+        connection.setTurnPlayer(players[turnPlayer])
     }
 
     fun handleInput(subtileX: Int, subtileY: Int, tileXRelative: Int, tileYRelative: Int) {
@@ -62,7 +60,7 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
     fun newTurn() {
         turnPlayer += 1
         turnPlayer %= players.size
-        connection.setTurnColor(players[turnPlayer].color)
+        connection.setTurnPlayer(players[turnPlayer])
     }
 
     fun testIfWon(): Player? {
