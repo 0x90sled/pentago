@@ -24,6 +24,7 @@ fun ShapeRenderer.roundedRect(x: Float, y: Float, width: Float, height: Float, r
 }
 
 open class GUIChip(val color: Color) {
+
     open var radius = 0F
     private var timePassed = 0F
     open var big = false

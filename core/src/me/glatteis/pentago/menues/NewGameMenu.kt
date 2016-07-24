@@ -110,7 +110,7 @@ class NewGameMenu : MenuStage() {
         val boardSizeDropdown = SelectBox<String>(boxStyle)
         boardSizeDropdown.items = Array(arrayOf("2x2", "3x3", "4x4"))
         boardSizeDropdown.width = 200F
-        boardSizeDropdown.setPosition(-400F, -600F, Align.center)
+        boardSizeDropdown.setPosition(0F, -500F, Align.center)
         addActor(boardSizeDropdown)
 
         val openToWifiButton = Button(Label("Open this game to WiFi",
@@ -122,14 +122,13 @@ class NewGameMenu : MenuStage() {
                 (openToWifiButton.children[0] as Label).setText("Your UUID is $uuid")
             }
         })
-        openToWifiButton.setPosition(200F, -500F, Align.center)
+        openToWifiButton.setPosition(0F, -600F, Align.center)
         addActor(openToWifiButton)
 
         val playButton = Button(Label("Play", labelStyle), Button.ButtonStyle())
         playButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 if (players.size < 2) return
-
                 val size: Int
                 when (boardSizeDropdown.selected) {
                     "2x2" -> size = 2
@@ -137,17 +136,14 @@ class NewGameMenu : MenuStage() {
                     "4x4" -> size = 4
                     else -> size = 2
                 }
-                PentagoCore.board = Board(3, size, size)
+                (PentagoCore.connector as LocalConnector).connection.startGame(size, size)
+                PentagoCore.board = Board(3, size, size, this@NewGameMenu)
                 PentagoCore.logic = GameLogic(3, size, size, players, 5)
                 PentagoCore.instance.screen = PentagoCore.board
             }
         })
         playButton.setPosition(0F, -800F, Align.center)
         addActor(playButton)
-    }
-
-    override fun show() {
-        Gdx.input.inputProcessor = this
     }
 
     fun generateRandomColor(mix: Color): Color {

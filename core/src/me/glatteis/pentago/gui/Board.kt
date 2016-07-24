@@ -18,16 +18,17 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.logic.Player
 import me.glatteis.pentago.logic.RotateDirection
+import me.glatteis.pentago.menues.MenuStage
 import me.glatteis.pentago.menues.NewGameMenu
 import java.util.*
 
 /**
  * Created by Linus on 21.07.2016!
  */
-class Board(val tileWidth: Int, val width: Int, val height: Int) : Stage(), Screen {
+class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: MenuStage) : Stage(), Screen {
 
     val subtiles = Array(width, {
-        Array<GUISubtile>(height, {
+        Array(height, {
             GUISubtile(tileWidth)
         })
     })
@@ -97,8 +98,10 @@ class Board(val tileWidth: Int, val width: Int, val height: Int) : Stage(), Scre
         val timer = Timer()
         timer.scheduleTask(object : Timer.Task(){
             override fun run() {
-                PentagoCore.instance.screen = NewGameMenu()
-                (PentagoCore.instance.screen as NewGameMenu).displayWonPopup(player)
+                PentagoCore.instance.screen = oldMenu
+                if (oldMenu is NewGameMenu) {
+                    oldMenu.displayWonPopup(player)
+                }
             }
         }, 2F)
     }

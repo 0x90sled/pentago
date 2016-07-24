@@ -2,16 +2,15 @@ package me.glatteis.pentago.connection
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.utils.Timer
-import com.esotericsoftware.kryo.KryoCopyable
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Listener
 import com.esotericsoftware.kryonet.Server
-import me.glatteis.pentago.Pentago
 import me.glatteis.pentago.PentagoCore
+import me.glatteis.pentago.gui.Board
 import me.glatteis.pentago.gui.GUIChip
 import me.glatteis.pentago.logic.Player
 import me.glatteis.pentago.logic.RotateDirection
+import me.glatteis.pentago.menues.WaitMenu
 import java.net.InetAddress
 import java.util.*
 import com.esotericsoftware.kryonet.Connection as KryoConnection
@@ -25,16 +24,17 @@ val udpPort = 53639
 
 class Connection {
 
-    lateinit var server: Server
+    var server: Server? = null
 
     fun createServer(uuid: UUID) {
-        val server = Server()
-        server.bind(tcpPort, udpPort)
-        server.start()
-        server.addListener(object : Listener() {
+        server = Server()
+        //Sorry for these !!'s, Kotlin
+        PacketRegistrar.registerPacketsFor(server!!)
+        server!!.start()
+        server!!.bind(tcpPort, udpPort)
+        server!!.addListener(object : Listener() {
             override fun received(connection: KryoConnection, any: Any?) {
                 any ?: return
-                println("Recieved $any from $connection")
                 with(any) {
                     if (this is HandleInput) {
                         PentagoCore.logic.handleInput(subtileX, subtileY, tileXRelative, tileYRelative)
@@ -48,26 +48,43 @@ class Connection {
         })
     }
 
-    fun addDisplayedGUIChip(subtileX: Int, subtileY: Int, x: Int, y: Int, chip: GUIChip) {
-        (PentagoCore.connector as LocalConnector).addDisplayedGUIChip(subtileX, subtileY, x, y, chip)
-        server.sendToAllTCP(AddDisplayedGUIChip(subtileX, subtileY, x, y, chip))
-    }
-
     fun setTurnColor(color: Color) {
         (PentagoCore.connector as LocalConnector).setTurnColor(color)
-        server.sendToAllTCP(SetTurnColor(color))
+        sendPacketToAll(SetTurnColor(color))
+    }
+
+    fun addDisplayedGUIChip(subtileX: Int, subtileY: Int, x: Int, y: Int, chip: GUIChip) {
+        (PentagoCore.connector as LocalConnector).addDisplayedGUIChip(subtileX, subtileY, x, y, chip)
+        sendPacketToAll(AddDisplayedGUIChip(subtileX, subtileY, x, y, chip.color))
     }
 
     fun rotateSubtile(subtileX: Int, subtileY: Int, direction: RotateDirection) {
         (PentagoCore.connector as LocalConnector).rotateSubtile(subtileX, subtileY, direction)
-        server.sendToAllTCP(RotateSubtile(subtileX, subtileY, direction))
+        sendPacketToAll(RotateSubtile(subtileX, subtileY, direction))
     }
 
     fun displayGameWon(player: Player) {
         (PentagoCore.connector as LocalConnector).displayGameWon(player)
-        server.sendToAllTCP(DisplayGameWon(player))
+        sendPacketToAll(DisplayGameWon(player))
+
     }
 
+    fun startGame(width: Int, height: Int) {
+        sendPacketToAll(LetsGo(width, height))
+    }
+
+    fun sendPacketToAll(packet: Any) {
+        server ?: return
+        println(server!!.connections)
+        for (connection in server!!.connections) {
+            connection.sendTCP(packet)
+        }
+    }
+
+}
+
+fun postRunnable(runnable: () -> Unit) {
+    Gdx.app.postRunnable(runnable)
 }
 
 interface Connector {
@@ -90,6 +107,7 @@ class LocalConnector : Connector {
     }
 
     fun addDisplayedGUIChip(subtileX: Int, subtileY: Int, x: Int, y: Int, chip: GUIChip) {
+        println("Adding to subtile $subtileX, $subtileY")
         PentagoCore.board.subtiles[subtileX][subtileY].addDisplayedGUIChip(x, y, chip)
     }
 
@@ -111,24 +129,41 @@ class ClientConnector() : Connector {
 
     val client = Client()
 
-    fun connectToServer(ip: String) {
-        client.connect(5000, ip, tcpPort)
+    fun connectToServer(ip: InetAddress) {
+        PacketRegistrar.registerPacketsFor(client)
+        client.start()
+        client.connect(5000, ip, tcpPort, udpPort)
         client.addListener(object : Listener() {
             override fun received(connection: KryoConnection, any: Any?) {
                 any ?: return
                 with(any) {
                     when (this) {
                         is AddDisplayedGUIChip -> {
-                            PentagoCore.board.subtiles[subtileX][subtileY].addDisplayedGUIChip(x, y, chip)
+                            postRunnable {
+                                PentagoCore.board.subtiles[subtileX][subtileY].addDisplayedGUIChip(x, y, GUIChip(chipColor))
+                            }
                         }
                         is SetTurnColor -> {
-                            PentagoCore.board.turn(color)
+                            postRunnable {
+                                PentagoCore.board.turn(color)
+                            }
                         }
                         is RotateSubtile -> {
-                            PentagoCore.board.rotateSubtile(subtileX, subtileY, direction)
+                            postRunnable {
+                                PentagoCore.board.rotateSubtile(subtileX, subtileY, direction)
+                            }
                         }
                         is DisplayGameWon -> {
-                            PentagoCore.board.displayGameWon(player)
+                            postRunnable {
+                                PentagoCore.board.displayGameWon(player)
+                            }
+                            client.stop()
+                        }
+                        is LetsGo -> {
+                            postRunnable {
+                                PentagoCore.board = Board(3, this.width, this.height, WaitMenu())
+                                PentagoCore.instance.screen = PentagoCore.board
+                            }
                         }
                     }
                 }

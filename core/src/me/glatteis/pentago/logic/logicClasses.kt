@@ -55,7 +55,8 @@ open class Chip(val player: Player?) {
 object NoChip: Chip(null)
 
 class Player(val color: Color, val name: String) {
-    val uuid: UUID = UUID.randomUUID()
+    //Empty constructor for packets
+    constructor() : this(Color(), "")
 }
 
 enum class RotateDirection {

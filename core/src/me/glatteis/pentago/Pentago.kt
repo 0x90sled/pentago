@@ -32,5 +32,4 @@ class Pentago : Game() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
         screen.render(Gdx.graphics.deltaTime)
     }
-
 }

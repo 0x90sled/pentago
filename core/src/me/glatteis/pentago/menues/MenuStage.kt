@@ -19,6 +19,7 @@ open class MenuStage : Stage(), Screen{
     }
 
     override fun show() {
+        Gdx.input.inputProcessor = this
     }
 
     override fun pause() {

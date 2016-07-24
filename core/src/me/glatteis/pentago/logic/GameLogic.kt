@@ -17,10 +17,12 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
     var playerHasWon = false
 
     val board = Array(width) {
-        Array<Subtile>(height) {
+        Array(height) {
             Subtile(tileWidth)
         }
     }
+
+
 
     init {
         connection.setTurnColor(players[turnPlayer].color)
@@ -39,22 +41,6 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
                 connection.displayGameWon(playerThatWon)
             }
             //printString()
-        }
-    }
-
-    fun printString() {
-        for (i in board.indices) {
-            for (j in board[0].indices) {
-                println("$i $j")
-                val subtile = board[i][j]
-                for (sub in subtile.rotated()) {
-                    for (chip in sub) {
-                        if (chip.player == null) print("*")
-                        else print(chip.player.color.toString()[0])
-                    }
-                    println()
-                }
-            }
         }
     }
 
@@ -117,6 +103,22 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
             }
         }
         return null
+    }
+
+    fun printString() {
+        for (i in board.indices) {
+            for (j in board[0].indices) {
+                println("$i $j")
+                val subtile = board[i][j]
+                for (sub in subtile.rotated()) {
+                    for (chip in sub) {
+                        if (chip.player == null) print("*")
+                        else print(chip.player.color.toString()[0])
+                    }
+                    println()
+                }
+            }
+        }
     }
 
 }

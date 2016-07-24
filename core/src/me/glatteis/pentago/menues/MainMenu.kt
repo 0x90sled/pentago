@@ -50,9 +50,8 @@ object MainMenu : MenuStage() {
         addActor(options)
     }
 
-    override fun show() {
-        Gdx.input.inputProcessor = this
-    }
+
+
 
 
 
