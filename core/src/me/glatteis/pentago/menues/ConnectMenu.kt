@@ -45,6 +45,15 @@ class ConnectMenu : MenuStage() {
         thread {
             searchServers()
         }
+
+        val back = Button(Label("Back", Label.LabelStyle(Textures.montserratMedium, Color.BLACK)), Button.ButtonStyle())
+        back.setPosition(0F, -800F, Align.center)
+        back.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                PentagoCore.instance.screen = MainMenu
+            }
+        })
+        addActor(back)
     }
 
     fun addServerToList(pair: Pair<String, InetAddress>) {

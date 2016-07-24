@@ -31,6 +31,10 @@ class NewGameMenu : MenuStage() {
         PentagoCore.connector = LocalConnector()
 
         val titleStyle = Label.LabelStyle(Textures.vanadineFontBig, Color.BLACK)
+        val labelStyle = Label.LabelStyle(Textures.montserratMedium, Color.BLACK)
+        val smallLabelStyle = Label.LabelStyle(Textures.montserratSmall, Color.BLACK)
+        val buttonStyle = Button.ButtonStyle()
+        val textFieldStyle = TextField.TextFieldStyle()
 
         val title = Label("NEW GAME", titleStyle)
         title.setPosition(0F, 800F, Align.center)
@@ -40,10 +44,7 @@ class NewGameMenu : MenuStage() {
 
         val players = ArrayList<Player>()
 
-        val labelStyle = Label.LabelStyle(Textures.montserratMedium, Color.BLACK)
-        val smallLabelStyle = Label.LabelStyle(Textures.montserratSmall, Color.BLACK)
-        val buttonStyle = Button.ButtonStyle()
-        val textFieldStyle = TextField.TextFieldStyle()
+
         textFieldStyle.font = Textures.montserratMedium
         textFieldStyle.fontColor = Color.BLACK
         textFieldStyle.background =
@@ -93,8 +94,8 @@ class NewGameMenu : MenuStage() {
 
         val scrollPane = ScrollPane(playerTable)
         scrollPane.width = 2000F
-        scrollPane.height = 600F
-        scrollPane.setPosition(0F, -200F, Align.center)
+        scrollPane.height = 650F
+        scrollPane.setPosition(0F, -100F, Align.center)
         addActor(scrollPane)
 
         val boxStyle = SelectBox.SelectBoxStyle()
@@ -116,7 +117,10 @@ class NewGameMenu : MenuStage() {
         val openToWifiButton = Button(Label("Open this game to WiFi",
                 Label.LabelStyle(Textures.montserratSmall, Color.BLACK)), buttonStyle)
         openToWifiButton.addListener(object : ClickListener() {
+            var clicked = false
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                if (clicked) return
+                clicked = true
                 val uuid = UUID.randomUUID()
                 (PentagoCore.connector as LocalConnector).connection.createServer(uuid)
                 (openToWifiButton.children[0] as Label).setText("Your UUID is $uuid")
@@ -124,6 +128,15 @@ class NewGameMenu : MenuStage() {
         })
         openToWifiButton.setPosition(0F, -600F, Align.center)
         addActor(openToWifiButton)
+
+        val back = Button(Label("Back", labelStyle), buttonStyle)
+        back.setPosition(-1000F, -800F, Align.left)
+        back.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                PentagoCore.instance.screen = MainMenu
+            }
+        })
+        addActor(back)
 
         val playButton = Button(Label("Play", labelStyle), Button.ButtonStyle())
         playButton.addListener(object : ClickListener() {
@@ -142,7 +155,7 @@ class NewGameMenu : MenuStage() {
                 PentagoCore.instance.screen = PentagoCore.board
             }
         })
-        playButton.setPosition(0F, -800F, Align.center)
+        playButton.setPosition(1000F, -800F, Align.right)
         addActor(playButton)
     }
 

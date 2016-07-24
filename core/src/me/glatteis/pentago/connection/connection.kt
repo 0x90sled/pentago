@@ -27,6 +27,7 @@ class Connection {
     var server: Server? = null
 
     fun createServer(uuid: UUID) {
+
         server = Server()
         //Sorry for these !!'s, Kotlin
         PacketRegistrar.registerPacketsFor(server!!)
@@ -107,7 +108,6 @@ class LocalConnector : Connector {
     }
 
     fun addDisplayedGUIChip(subtileX: Int, subtileY: Int, x: Int, y: Int, chip: GUIChip) {
-        println("Adding to subtile $subtileX, $subtileY")
         PentagoCore.board.subtiles[subtileX][subtileY].addDisplayedGUIChip(x, y, chip)
     }
 
@@ -157,7 +157,6 @@ class ClientConnector() : Connector {
                             postRunnable {
                                 PentagoCore.board.displayGameWon(player)
                             }
-                            client.stop()
                         }
                         is LetsGo -> {
                             postRunnable {
