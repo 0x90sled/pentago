@@ -24,16 +24,15 @@ val udpPort = 53639
 
 class Connection {
 
-    var server: Server? = null
+    lateinit var server: Server
 
     fun createServer(uuid: UUID) {
-
         server = Server()
         //Sorry for these !!'s, Kotlin
-        PacketRegistrar.registerPacketsFor(server!!)
-        server!!.start()
-        server!!.bind(tcpPort, udpPort)
-        server!!.addListener(object : Listener() {
+        PacketRegistrar.registerPacketsFor(server)
+        server.start()
+        server.bind(tcpPort, udpPort)
+        server.addListener(object : Listener() {
             override fun received(connection: KryoConnection, any: Any?) {
                 any ?: return
                 with(any) {
@@ -47,6 +46,10 @@ class Connection {
                 }
             }
         })
+    }
+
+    fun disconnect() {
+        server.stop()
     }
 
     fun setTurnPlayer(player: Player) {

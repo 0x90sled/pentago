@@ -134,6 +134,9 @@ class NewGameMenu : MenuStage() {
         back.setPosition(-1000F, -800F, Align.left)
         back.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                if (PentagoCore.connector is LocalConnector) {
+                    (PentagoCore.connector as LocalConnector).connection.disconnect()
+                }
                 PentagoCore.instance.screen = MainMenu
             }
         })
