@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array
 import me.glatteis.pentago.Pentago
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.connection.LocalConnector
+import me.glatteis.pentago.gui.BandColorDrawable
 import me.glatteis.pentago.gui.Board
 import me.glatteis.pentago.gui.ColorDrawable
 import me.glatteis.pentago.gui.Textures
@@ -84,7 +85,7 @@ class NewGameMenu : MenuStage() {
 
                 group.add(remove).right()
 
-                group.background = ColorDrawable(player.color)
+                group.background = BandColorDrawable(player.color, 2000F)
 
                 playerTable.add(group).row()
             }

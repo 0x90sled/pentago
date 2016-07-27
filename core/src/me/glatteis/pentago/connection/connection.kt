@@ -172,6 +172,10 @@ class ClientConnector() : Connector {
         })
     }
 
+    fun disconnect() {
+        client.stop()
+    }
+
     override fun handleInput(subtileX: Int, subtileY: Int, tileXRelative: Int, tileYRelative: Int) {
         client.sendTCP(HandleInput(subtileX, subtileY, tileXRelative, tileYRelative))
     }

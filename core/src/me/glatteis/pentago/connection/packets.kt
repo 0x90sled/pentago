@@ -65,7 +65,7 @@ object PacketRegistrar {
         val classes = listOf(AddDisplayedGUIChip::class.java, SetTurnPlayer::class.java, RotateSubtile::class.java,
                 DisplayGameWon::class.java, LetsGo::class.java, HandleInput::class.java, HandleTurn::class.java,
                 WhatsYourName::class.java, MyNameIs::class.java, RotateDirection::class.java, Color::class.java,
-                Player::class.java, UUID::class.java)
+                Player::class.java, UUID::class.java, Array<Player>::class.java)
         for (c in classes) {
             kryo.register(c)
         }

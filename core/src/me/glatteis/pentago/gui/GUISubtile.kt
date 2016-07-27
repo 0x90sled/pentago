@@ -25,16 +25,16 @@ class GUISubtile(val slotWidth: Int) : Actor() {
         })
     })
 
-    val pixelWidth = (slotWidth + 1) * GUIConstants.chipGap + slotWidth * GUIConstants.chipRadius * 2
-    val pixelShift = (slotWidth / 2) * (GUIConstants.chipRadius * 2 + GUIConstants.chipGap)
+    val pixelWidth = (slotWidth + 1) * GUIConstants.chipGap  + slotWidth * GUIConstants.chipRadius * 2
+    val pixelShift = (slotWidth / 2) * (GUIConstants.chipRadius  * 2 + GUIConstants.chipGap )
 
     fun tap(screenX: Float, screenY: Float, count: Int, button: Int): Boolean {
         val coords = screenToLocalCoordinates(Vector2(screenX.toFloat(), screenY.toFloat()))
         if (Math.abs(coords.x) < pixelWidth / 2 && Math.abs(coords.y) < pixelWidth / 2) {
             var x = coords.x + pixelShift
             var y = coords.y + pixelShift
-            x /= GUIConstants.chipGap + GUIConstants.chipRadius * 2
-            y /= GUIConstants.chipGap + GUIConstants.chipRadius * 2
+            x /= GUIConstants.chipGap  + GUIConstants.chipRadius  * 2
+            y /= GUIConstants.chipGap  + GUIConstants.chipRadius  * 2
             val roundedX = Math.round(x)
             val roundedY = Math.round(y)
             if (roundedX >= 0 && roundedY >= 0 && roundedX < slotWidth && roundedY < slotWidth) {
@@ -65,7 +65,6 @@ class GUISubtile(val slotWidth: Int) : Actor() {
                 }
             }
         }
-
         return null
     }
 
@@ -93,9 +92,8 @@ class GUISubtile(val slotWidth: Int) : Actor() {
         shapeRenderer.translate(position.x, position.y, 0F)
         shapeRenderer.rotate(0F, 0F, 1F, rotation)
 
-        //shapeRenderer.circle(0F, 0F, pixelWidth / 2)
-
-        shapeRenderer.roundedRect(-(pixelWidth / 2), -(pixelWidth / 2), pixelWidth, pixelWidth, 30F)
+        shapeRenderer.roundedRect(-(pixelWidth / 2), -(pixelWidth / 2), pixelWidth, pixelWidth, GUIConstants.chipRadius
+                )
 
         for (chips in displayedGUIChips.indices) for (chip in displayedGUIChips[0].indices) {
             val thisChip = displayedGUIChips[chips][chip]
@@ -105,8 +103,8 @@ class GUISubtile(val slotWidth: Int) : Actor() {
                 shapeRenderer.color = thisChip.color
             }
             shapeRenderer.circle(
-                    GUIConstants.chipRadius * 2 * chips + GUIConstants.chipGap * chips - pixelShift,
-                    GUIConstants.chipRadius * 2 * chip + GUIConstants.chipGap * chip - pixelShift,
+                    GUIConstants.chipRadius * 2 * chips + GUIConstants.chipGap  * chips - pixelShift,
+                    GUIConstants.chipRadius * 2 * chip + GUIConstants.chipGap  * chip - pixelShift,
                     thisChip.radius
             )
 

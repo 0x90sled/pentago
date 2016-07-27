@@ -5,8 +5,8 @@ package me.glatteis.pentago.gui
  */
 object GUIConstants {
 
-    val chipRadius = 50F
-    val chipGap = 10
+    val chipRadius = 200F
+    val chipGap = 40
     val subtileGap = 50
 
 }

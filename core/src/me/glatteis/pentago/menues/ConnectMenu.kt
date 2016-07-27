@@ -85,7 +85,6 @@ class ConnectMenu : MenuStage() {
             clientForThis.addListener(object : Listener() {
                 override fun received(connection: Connection, any: Any?) {
                     any ?: return
-                    println("Received $any from $connection")
                     if (any is MyNameIs) {
                         any.name ?: return
                         if (!foundServers.contains(any.name as String)) {

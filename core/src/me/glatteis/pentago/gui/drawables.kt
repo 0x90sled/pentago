@@ -19,3 +19,12 @@ class ColorDrawable(var color: Color) : BaseDrawable() {
         batch.draw(textureRegion, x, y, width, height)
     }
 }
+
+class BandColorDrawable(val color: Color, val drawWidth: Float) : BaseDrawable() {
+    val textureRegion = TextureRegion(Texture(Gdx.files.internal("textures/white_pixel.png")))
+    override fun draw(batch: Batch?, x: Float, y: Float, width: Float, height: Float) {
+        batch ?: return
+        batch.color = color
+        batch.draw(textureRegion, 0F, y, drawWidth, height)
+    }
+}
