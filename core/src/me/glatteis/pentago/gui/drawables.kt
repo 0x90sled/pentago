@@ -20,7 +20,7 @@ class ColorDrawable(var color: Color) : BaseDrawable() {
     }
 }
 
-class BandColorDrawable(val color: Color, val drawWidth: Float) : BaseDrawable() {
+class BandColorDrawable(val color: Color, var drawWidth: Float) : BaseDrawable() {
     val textureRegion = TextureRegion(Texture(Gdx.files.internal("textures/white_pixel.png")))
     override fun draw(batch: Batch?, x: Float, y: Float, width: Float, height: Float) {
         batch ?: return

@@ -66,7 +66,7 @@ class Connection {
         sendPacketToAll(RotateSubtile(subtileX, subtileY, direction))
     }
 
-    fun displayGameWon(player: Player) {
+    fun displayGameWon(player: Player?) {
         (PentagoCore.connector as LocalConnector).displayGameWon(player)
         sendPacketToAll(DisplayGameWon(player))
 
@@ -122,7 +122,7 @@ class LocalConnector : Connector {
         PentagoCore.board.rotateSubtile(subtileX, subtileY, direction)
     }
 
-    fun displayGameWon(player: Player) {
+    fun displayGameWon(player: Player?) {
         PentagoCore.board.displayGameWon(player)
     }
 

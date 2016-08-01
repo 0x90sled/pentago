@@ -15,10 +15,8 @@ import com.badlogic.gdx.utils.Array
 import me.glatteis.pentago.Pentago
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.connection.LocalConnector
-import me.glatteis.pentago.gui.BandColorDrawable
-import me.glatteis.pentago.gui.Board
-import me.glatteis.pentago.gui.ColorDrawable
-import me.glatteis.pentago.gui.Textures
+import me.glatteis.pentago.generateRandomColor
+import me.glatteis.pentago.gui.*
 import me.glatteis.pentago.logic.GameLogic
 import me.glatteis.pentago.logic.Player
 import java.util.*
@@ -60,7 +58,7 @@ class NewGameMenu : MenuStage() {
         keyboardFocus = playerTypeBox
         addActor(playerTypeBox)
 
-        val addPlayer = Button(Label("Add Player", smallLabelStyle), buttonStyle)
+        val addPlayer = PentagoLabelButton("Add Player", smallLabelStyle)
         addPlayer.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 val playerName = playerTypeBox.text
@@ -74,9 +72,8 @@ class NewGameMenu : MenuStage() {
                 group.width = 2000F
                 group.add(Label(playerName + "   ", Label.LabelStyle(Textures.montserratMedium, Color.BLACK))).left().expand()
 
-                val remove = Button(Label("Remove", Label.LabelStyle(Textures.montserratSmall, Color.BLACK)),
-                        Button.ButtonStyle())
-                remove.addListener(object : ClickListener() {
+                val remove = PentagoLabelButton("Remove", Label.LabelStyle(Textures.montserratSmall, Color.BLACK))
+                remove.listener = (object : ClickListener() {
                     override fun clicked(event: InputEvent?, x: Float, y: Float) {
                         playerTable.removeActor(group)
                         players.remove(player)
@@ -116,8 +113,8 @@ class NewGameMenu : MenuStage() {
         boardSizeDropdown.setPosition(0F, -500F, Align.center)
         addActor(boardSizeDropdown)
 
-        val openToWifiButton = Button(Label("Open this game to WiFi",
-                Label.LabelStyle(Textures.montserratSmall, Color.BLACK)), buttonStyle)
+        val openToWifiButton = PentagoLabelButton("Open this game to WiFi",
+                Label.LabelStyle(Textures.montserratSmall, Color.BLACK))
         openToWifiButton.addListener(object : ClickListener() {
             var clicked = false
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -131,9 +128,9 @@ class NewGameMenu : MenuStage() {
         openToWifiButton.setPosition(0F, -600F, Align.center)
         addActor(openToWifiButton)
 
-        val back = Button(Label("Back", labelStyle), buttonStyle)
+        val back = PentagoLabelButton("Back", labelStyle)
         back.setPosition(-1000F, -800F, Align.left)
-        back.addListener(object : ClickListener() {
+        back.listener = (object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 if (PentagoCore.connector is LocalConnector) {
                     (PentagoCore.connector as LocalConnector).connection.disconnect()
@@ -143,8 +140,8 @@ class NewGameMenu : MenuStage() {
         })
         addActor(back)
 
-        val playButton = Button(Label("Play", labelStyle), Button.ButtonStyle())
-        playButton.addListener(object : ClickListener() {
+        val playButton = PentagoLabelButton("Play", labelStyle)
+        playButton.listener = (object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 if (players.size < 2) return
                 val selectedSize = boardSizeDropdown.selected.split("x")
@@ -160,18 +157,6 @@ class NewGameMenu : MenuStage() {
         addActor(playButton)
     }
 
-    fun generateRandomColor(mix: Color): Color {
-        val random = Random()
-        var red = random.nextFloat()
-        var green = random.nextFloat()
-        var blue = random.nextFloat()
 
-        red = (red + mix.r) / 2
-        green = (green + mix.g) / 2
-        blue = (blue + mix.b) / 2
-
-        val color = Color(red, green, blue, 1F)
-        return color
-    }
 
 }

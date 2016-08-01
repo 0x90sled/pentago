@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import me.glatteis.pentago.Pentago
 import me.glatteis.pentago.PentagoCore
+import me.glatteis.pentago.gui.PentagoLabelButton
 import me.glatteis.pentago.gui.Textures
 
 /**
@@ -27,25 +28,30 @@ object MainMenu : MenuStage() {
         val labelStyle = Label.LabelStyle(Textures.montserratMedium, Color.BLACK)
         val buttonStyle = Button.ButtonStyle()
 
-        val newGame = Button(Label("New Game", labelStyle), buttonStyle)
-        newGame.addListener(object : ClickListener() {
+        val newGame = PentagoLabelButton("New Game", labelStyle)
+        newGame.listener = object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 PentagoCore.instance.screen = NewGameMenu()
             }
-        })
+        }
         newGame.setPosition(0F, 400F, Align.center)
         addActor(newGame)
 
-        val joinNetworkGame = Button(Label("Join Network Game", labelStyle), buttonStyle)
+        val joinNetworkGame = PentagoLabelButton("Join Network Game", labelStyle)
         joinNetworkGame.setPosition(0F, 0F, Align.center)
-        joinNetworkGame.addListener(object : ClickListener() {
+        joinNetworkGame.listener = (object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 PentagoCore.instance.screen = ConnectMenu()
             }
         })
         addActor(joinNetworkGame)
 
-        val options = Button(Label("Licenses", labelStyle), buttonStyle)
+        val options = PentagoLabelButton("Licenses", labelStyle)
+        options.listener = (object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                PentagoCore.instance.screen = OptionsMenu()
+            }
+        })
         options.setPosition(0F, -400F, Align.center)
         
         addActor(options)

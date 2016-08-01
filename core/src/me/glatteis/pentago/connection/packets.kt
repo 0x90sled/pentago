@@ -30,8 +30,8 @@ class RotateSubtile(var subtileX: Int, var subtileY: Int, var direction: RotateD
     constructor() : this(0, 0, RotateDirection.CLOCKWISE)
 }
 
-class DisplayGameWon(var player: Player) {
-    constructor() : this(Player(Color.WHITE, ""))
+class DisplayGameWon(var player: Player?) {
+    constructor() : this(null)
 }
 
 class LetsGo(var width: Int, var height: Int, val players: Array<Player>) {

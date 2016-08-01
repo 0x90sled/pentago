@@ -54,7 +54,7 @@ open class Chip(val player: Player?) {
 
 object NoChip: Chip(null)
 
-class Player(val color: Color, val name: String) {
+open class Player(val color: Color, val name: String) {
     //Empty constructor for packets
     constructor() : this(Color(), "")
 }

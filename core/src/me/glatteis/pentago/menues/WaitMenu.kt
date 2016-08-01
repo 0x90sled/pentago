@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.connection.ClientConnector
+import me.glatteis.pentago.gui.PentagoLabelButton
 import me.glatteis.pentago.gui.Textures
 
 /**
@@ -20,10 +21,9 @@ class WaitMenu : MenuStage() {
         title.setPosition(0F, 0F, Align.center)
         addActor(title)
 
-        val disconnect = Button(Label("Disconnect", Label.LabelStyle(Textures.montserratMedium, Color.BLACK)),
-                Button.ButtonStyle())
+        val disconnect = PentagoLabelButton("Disconnect", Label.LabelStyle(Textures.montserratMedium, Color.BLACK))
         disconnect.setPosition(0F, -500F, Align.center)
-        disconnect.addListener(object : ClickListener() {
+        disconnect.listener = (object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 if (PentagoCore.connector is ClientConnector) {
                     (PentagoCore.connector as ClientConnector).disconnect()

@@ -15,6 +15,7 @@ import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Listener
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.connection.*
+import me.glatteis.pentago.gui.PentagoLabelButton
 import me.glatteis.pentago.gui.Textures
 import java.net.InetAddress
 import java.util.*
@@ -46,9 +47,9 @@ class ConnectMenu : MenuStage() {
             searchServers()
         }
 
-        val back = Button(Label("Back", Label.LabelStyle(Textures.montserratMedium, Color.BLACK)), Button.ButtonStyle())
+        val back = PentagoLabelButton("Back", Label.LabelStyle(Textures.montserratMedium, Color.BLACK))
         back.setPosition(0F, -800F, Align.center)
-        back.addListener(object : ClickListener() {
+        back.listener = (object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 PentagoCore.instance.screen = MainMenu
             }
@@ -94,7 +95,6 @@ class ConnectMenu : MenuStage() {
                     }
                 }
             })
-            println("Sending packet to $host!")
             clientForThis.sendTCP(WhatsYourName())
             val timer = Timer()
             timer.scheduleTask(object : Timer.Task() {

@@ -122,12 +122,14 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
 
     }
 
-    fun displayGameWon(player: Player) {
+    fun displayGameWon(player: Player?) {
         setTurnColor(Color.valueOf("FFFFFF"))
-        for (table in playerList.cells) {
-            for (item in (table.actor as Table).cells) {
-                if (item.actor is Label && (item.actor as Label).textEquals(player.name)) {
-                    (item.actor as Label).setText(player.name + " has won the game")
+        if (player != null) {
+            for (table in playerList.cells) {
+                for (item in (table.actor as Table).cells) {
+                    if (item.actor is Label && (item.actor as Label).textEquals(player.name)) {
+                        (item.actor as Label).setText(player.name + " has won the game")
+                    }
                 }
             }
         }

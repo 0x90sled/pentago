@@ -34,11 +34,10 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
             connection.addDisplayedGUIChip(subtileX, subtileY, tileXRelative, tileYRelative, GUIChip.fromChip(newChip))
             mode = Mode.ROTATE
             val playerThatWon = testIfWon()
-            if (playerThatWon != null) {
+            if (playerThatWon != NoPlayer) {
                 playerHasWon = true
                 connection.displayGameWon(playerThatWon)
             }
-            //printString()
         }
     }
 
@@ -48,7 +47,7 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
             mode = Mode.PUT
             connection.rotateSubtile(subtileX, subtileY, direction)
             val playerThatWon = testIfWon()
-            if (playerThatWon != null) {
+            if (playerThatWon != NoPlayer) {
                 playerHasWon = true
                 connection.displayGameWon(playerThatWon)
                 return
@@ -63,6 +62,10 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         connection.setTurnPlayer(players[turnPlayer])
     }
 
+    object NoPlayer : Player()
+
+    //Returns NoPlayer if the game is not over yet.
+    //Returns null if the game is over, and no one won.
     fun testIfWon(): Player? {
         val allRotatedSubtiles = Array(width, {
             Array(height, {
@@ -76,10 +79,12 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         for (a in 0..width - 1) for (b in 0..height - 1) {
             allRotatedSubtiles[a][b] = board[a][b].rotated()
         }
+        var occupiedChips = 0
         for (r in 0..width - 1) for (h in 0..height - 1) {
             for (x in 0..tileWidth - 1) for (y in 0..tileWidth - 1) {
                 val chip = allRotatedSubtiles[r][h][x][y]
                 if (chip.player == null) continue
+                occupiedChips++
                 val player = chip.player
                 for (i in -1..1) {
                     for (j in -1..1) {
@@ -100,7 +105,10 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
                 }
             }
         }
-        return null
+        if (occupiedChips == width * height * 3 * 3) {
+            return null
+        }
+        return NoPlayer
     }
 
     fun printString() {
