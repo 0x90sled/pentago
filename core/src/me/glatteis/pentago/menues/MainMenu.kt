@@ -45,8 +45,9 @@ object MainMenu : MenuStage() {
         })
         addActor(joinNetworkGame)
 
-        val options = Button(Label("Options", labelStyle), buttonStyle)
+        val options = Button(Label("Licenses", labelStyle), buttonStyle)
         options.setPosition(0F, -400F, Align.center)
+        
         addActor(options)
     }
 

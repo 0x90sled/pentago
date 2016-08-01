@@ -108,9 +108,10 @@ class NewGameMenu : MenuStage() {
         listStyle.fontColorSelected = Color.BLACK
         listStyle.fontColorUnselected = Color.BLACK
         listStyle.selection = ColorDrawable(Color.YELLOW)
+        listStyle.background = ColorDrawable(Color.WHITE)
         boxStyle.listStyle = listStyle
         val boardSizeDropdown = SelectBox<String>(boxStyle)
-        boardSizeDropdown.items = Array(arrayOf("2x2", "3x3", "4x4"))
+        boardSizeDropdown.items = Array(arrayOf("2x2", "3x3", "4x4", "1x3", "1x4", "2x3", "2x4"))
         boardSizeDropdown.width = 200F
         boardSizeDropdown.setPosition(0F, -500F, Align.center)
         addActor(boardSizeDropdown)
@@ -146,16 +147,12 @@ class NewGameMenu : MenuStage() {
         playButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 if (players.size < 2) return
-                val size: Int
-                when (boardSizeDropdown.selected) {
-                    "2x2" -> size = 2
-                    "3x3" -> size = 3
-                    "4x4" -> size = 4
-                    else -> size = 2
-                }
-                (PentagoCore.connector as LocalConnector).connection.startGame(size, size, players.toTypedArray())
-                PentagoCore.board = Board(3, size, size, this@NewGameMenu, players.toTypedArray())
-                PentagoCore.logic = GameLogic(3, size, size, players, 5)
+                val selectedSize = boardSizeDropdown.selected.split("x")
+                val sizeX = selectedSize[0].toInt()
+                val sizeY = selectedSize[1].toInt()
+                (PentagoCore.connector as LocalConnector).connection.startGame(sizeX, sizeY, players.toTypedArray())
+                PentagoCore.board = Board(3, sizeX, sizeY, this@NewGameMenu, players.toTypedArray())
+                PentagoCore.logic = GameLogic(3, sizeX, sizeY, players, 5)
                 PentagoCore.instance.screen = PentagoCore.board
             }
         })
@@ -175,15 +172,6 @@ class NewGameMenu : MenuStage() {
 
         val color = Color(red, green, blue, 1F)
         return color
-    }
-
-    fun displayWonPopup(player: Player) {
-        val dialog = Dialog("${player.name} won!", Window.WindowStyle(Textures.montserratMedium, Color.BLACK, ColorDrawable(player.color)))
-                .button(Button(Label("OK", Label.LabelStyle(Textures.montserratMedium, Color.BLACK)), Button.ButtonStyle()))
-        dialog.width = 1000F
-        dialog.height = 500F
-        dialog.setPosition(0F, 0F, Align.center)
-        addActor(dialog)
     }
 
 }

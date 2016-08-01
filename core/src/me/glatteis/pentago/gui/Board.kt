@@ -124,15 +124,19 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
 
     fun displayGameWon(player: Player) {
         setTurnColor(Color.valueOf("FFFFFF"))
+        for (table in playerList.cells) {
+            for (item in (table.actor as Table).cells) {
+                if (item.actor is Label && (item.actor as Label).textEquals(player.name)) {
+                    (item.actor as Label).setText(player.name + " has won the game")
+                }
+            }
+        }
         val timer = Timer()
         timer.scheduleTask(object : Timer.Task() {
             override fun run() {
                 PentagoCore.instance.screen = oldMenu
-                if (oldMenu is NewGameMenu) {
-                    oldMenu.displayWonPopup(player)
-                }
             }
-        }, 2F)
+        }, 4F)
     }
 
 
