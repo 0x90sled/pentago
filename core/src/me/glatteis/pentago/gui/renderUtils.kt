@@ -2,6 +2,9 @@ package me.glatteis.pentago.gui
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.scenes.scene2d.Action
+import com.badlogic.gdx.scenes.scene2d.Stage
+import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.logic.Chip
 
 /**
@@ -52,4 +55,25 @@ open class GUIChip(val color: Color) {
 object NoGUIChip : GUIChip(Color.BLACK) {
     override var big = true
     override var radius = GUIConstants.chipRadius
+}
+
+fun Stage.setTurnColor(color: Color) {
+    addAction(object : Action() {
+        val r = PentagoCore.backgroundColor.r
+        val g = PentagoCore.backgroundColor.g
+        val b = PentagoCore.backgroundColor.b
+        val a = PentagoCore.backgroundColor.a
+
+        var elapsedTime = 0F
+
+        override fun act(delta: Float): Boolean {
+            elapsedTime += delta
+            PentagoCore.backgroundColor.r = elapsedTime * color.r + ((1 - elapsedTime) * r)
+            PentagoCore.backgroundColor.g = elapsedTime * color.g + ((1 - elapsedTime) * g)
+            PentagoCore.backgroundColor.b = elapsedTime * color.b + ((1 - elapsedTime) * b)
+            PentagoCore.backgroundColor.a = elapsedTime * color.a + ((1 - elapsedTime) * a)
+            if (elapsedTime >= 1) return true
+            return false
+        }
+    })
 }

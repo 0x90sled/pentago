@@ -97,27 +97,6 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
         subtile.addAction(Actions.rotateBy(degrees, 1F, Interpolation.pow2))
     }
 
-    fun setTurnColor(color: Color) {
-        addAction(object : Action() {
-            val r = PentagoCore.backgroundColor.r
-            val g = PentagoCore.backgroundColor.g
-            val b = PentagoCore.backgroundColor.b
-            val a = PentagoCore.backgroundColor.a
-
-            var elapsedTime = 0F
-
-            override fun act(delta: Float): Boolean {
-                elapsedTime += delta
-                PentagoCore.backgroundColor.r = elapsedTime * color.r + ((1 - elapsedTime) * r)
-                PentagoCore.backgroundColor.g = elapsedTime * color.g + ((1 - elapsedTime) * g)
-                PentagoCore.backgroundColor.b = elapsedTime * color.b + ((1 - elapsedTime) * b)
-                PentagoCore.backgroundColor.a = elapsedTime * color.a + ((1 - elapsedTime) * a)
-                if (elapsedTime >= 1) return true
-                return false
-            }
-        })
-    }
-
     fun selectPlayer(player: Player) {
 
     }
@@ -137,6 +116,7 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
         timer.scheduleTask(object : Timer.Task() {
             override fun run() {
                 PentagoCore.instance.screen = oldMenu
+                dispose()
             }
         }, 4F)
     }

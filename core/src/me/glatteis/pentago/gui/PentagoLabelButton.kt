@@ -42,7 +42,7 @@ class PentagoLabelButton(text: String, labelStyle: Label.LabelStyle) : Button(La
     override fun act(delta: Float) {
         super.act(delta)
         if (clicked) {
-            elapsedTime += delta * 100F * direction
+            elapsedTime += delta * 200F * direction
             size = Math.pow(elapsedTime.toDouble(), 2.0).toFloat()
             if (size >= width && direction == 1) {
                 direction = -1

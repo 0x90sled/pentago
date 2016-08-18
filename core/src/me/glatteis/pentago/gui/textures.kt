@@ -18,8 +18,6 @@ object Textures {
     val montserratMedium = BitmapFont(Gdx.files.internal("m_medium/montserrat_medium.fnt"))
     val montserratSmall = BitmapFont(Gdx.files.internal("m_small/montserrat_small.fnt"))
 
-    fun load() {
-
-    }
+    fun load() = Unit
 }
 

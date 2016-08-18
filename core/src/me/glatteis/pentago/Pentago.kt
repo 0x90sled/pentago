@@ -2,15 +2,10 @@ package me.glatteis.pentago
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import me.glatteis.pentago.connection.LocalConnector
-import me.glatteis.pentago.gui.Board
 import me.glatteis.pentago.gui.Textures
-import me.glatteis.pentago.logic.GameLogic
-import me.glatteis.pentago.logic.Player
 import me.glatteis.pentago.menues.MainMenu
-import java.util.*
+import me.glatteis.pentago.menues.SplashScreen
 
 /**
  * Created by Linus on 21.07.2016!
@@ -21,9 +16,7 @@ class Pentago : Game() {
     override fun create() {
         PentagoCore.instance = this
 
-        Textures.load()
-
-        setScreen(MainMenu)
+        setScreen(SplashScreen())
     }
 
     override fun render() {

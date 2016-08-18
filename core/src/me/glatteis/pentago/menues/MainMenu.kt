@@ -1,16 +1,10 @@
 package me.glatteis.pentago.menues
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.InputListener
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import me.glatteis.pentago.Pentago
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.gui.PentagoLabelButton
 import me.glatteis.pentago.gui.Textures
@@ -26,7 +20,6 @@ object MainMenu : MenuStage() {
         addActor(title)
 
         val labelStyle = Label.LabelStyle(Textures.montserratMedium, Color.BLACK)
-        val buttonStyle = Button.ButtonStyle()
 
         val newGame = PentagoLabelButton("New Game", labelStyle)
         newGame.listener = object : ClickListener() {

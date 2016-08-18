@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.Server
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.gui.Board
 import me.glatteis.pentago.gui.GUIChip
+import me.glatteis.pentago.gui.setTurnColor
 import me.glatteis.pentago.logic.Player
 import me.glatteis.pentago.logic.RotateDirection
 import me.glatteis.pentago.menues.WaitMenu
