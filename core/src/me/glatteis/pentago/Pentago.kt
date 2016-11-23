@@ -13,16 +13,20 @@ import me.glatteis.pentago.menues.SplashScreen
 
 class Pentago : Game() {
 
+    var glCoverageBuffer: Int = 0
+
     override fun create() {
         PentagoCore.instance = this
-
+        glCoverageBuffer = if (Gdx.graphics.bufferFormat.coverageSampling) GL20.GL_COVERAGE_BUFFER_BIT_NV else 0
         setScreen(SplashScreen())
     }
+
+
 
     override fun render() {
         Gdx.gl.glClearColor(PentagoCore.backgroundColor.r, PentagoCore.backgroundColor.g, PentagoCore.backgroundColor.b,
                 PentagoCore.backgroundColor.a)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT or glCoverageBuffer)
         screen.render(Gdx.graphics.deltaTime)
     }
 }

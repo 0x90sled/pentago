@@ -17,7 +17,7 @@ import me.glatteis.pentago.gui.Textures
 class WaitMenu : MenuStage() {
 
     init {
-        val title = Label("WAITING FOR HOST", Label.LabelStyle(Textures.vanadineFontBig, Color.BLACK))
+        val title = Label("WAITING FOR HOST", Label.LabelStyle(Textures.vanadineBig, Color.BLACK))
         title.setPosition(0F, 0F, Align.center)
         addActor(title)
 

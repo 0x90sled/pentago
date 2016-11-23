@@ -13,8 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 object Textures {
 
-    val vanadineFontBig = BitmapFont(Gdx.files.internal("vanadine_font/vanadine.fnt"))
-    val vanadineFontSmall = BitmapFont(Gdx.files.internal("vanadine_font_small/vanadine_font_small.fnt"))
+    val vanadineBig = BitmapFont(Gdx.files.internal("vanadine_font/vanadine.fnt"))
     val montserratMedium = BitmapFont(Gdx.files.internal("m_medium/montserrat_medium.fnt"))
     val montserratSmall = BitmapFont(Gdx.files.internal("m_small/montserrat_small.fnt"))
 

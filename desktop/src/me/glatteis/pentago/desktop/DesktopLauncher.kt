@@ -10,6 +10,7 @@ class DesktopLauncher {
         @JvmStatic
         fun main(arg: Array<String>) {
             val config = LwjglApplicationConfiguration()
+            config.samples = 2
             LwjglApplication(Pentago(), config)
         }
     }

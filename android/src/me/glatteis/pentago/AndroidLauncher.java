@@ -5,10 +5,9 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 /**
- * Created by Linus on 23.07.2016!
+ * Created by Linus on 30.10.2016!
  */
 public class AndroidLauncher extends AndroidApplication {
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();

@@ -15,7 +15,7 @@ import me.glatteis.pentago.gui.Textures
 object MainMenu : MenuStage() {
 
     init {
-        val title = Label("PENTAGO", Label.LabelStyle(Textures.vanadineFontBig, Color.BLACK))
+        val title = Label("PENTAGO", Label.LabelStyle(Textures.vanadineBig, Color.BLACK))
         title.setPosition(0F, 800F, Align.center)
         addActor(title)
 

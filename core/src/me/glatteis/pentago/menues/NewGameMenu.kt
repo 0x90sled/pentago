@@ -29,7 +29,7 @@ class NewGameMenu : MenuStage() {
     init {
         PentagoCore.connector = LocalConnector()
 
-        val titleStyle = Label.LabelStyle(Textures.vanadineFontBig, Color.BLACK)
+        val titleStyle = Label.LabelStyle(Textures.vanadineBig, Color.BLACK)
         val labelStyle = Label.LabelStyle(Textures.montserratMedium, Color.BLACK)
         val smallLabelStyle = Label.LabelStyle(Textures.montserratSmall, Color.BLACK)
         val buttonStyle = Button.ButtonStyle()

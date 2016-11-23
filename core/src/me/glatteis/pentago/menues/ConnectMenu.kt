@@ -33,7 +33,7 @@ class ConnectMenu : MenuStage() {
     init {
         PentagoCore.connector = connector
 
-        val title = Label("CONNECT TO SERVER", Label.LabelStyle(Textures.vanadineFontBig, Color.BLACK))
+        val title = Label("CONNECT TO SERVER", Label.LabelStyle(Textures.vanadineBig, Color.BLACK))
         title.setPosition(0F, 800F, Align.center)
         addActor(title)
 
