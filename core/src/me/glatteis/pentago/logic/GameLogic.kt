@@ -24,10 +24,13 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
 
     init {
         connection.setTurnPlayer(players[turnPlayer])
+        if (players[turnPlayer] is AIPlayer) {
+            (players[turnPlayer] as AIPlayer).turn(this)
+        }
     }
 
     fun handleInput(subtileX: Int, subtileY: Int, tileXRelative: Int, tileYRelative: Int) {
-        if (mode == Mode.PUT && !playerHasWon) {
+        if (mode == Mode.PUT && !playerHasWon && players[turnPlayer] !is AIPlayer) {
             if (board[subtileX][subtileY].board[tileXRelative][tileYRelative] != NoChip) return
             val newChip = Chip(players[turnPlayer])
             board[subtileX][subtileY].board[tileXRelative][tileYRelative] = newChip
@@ -42,7 +45,7 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
     }
 
     fun handleTurn(subtileX: Int, subtileY: Int, direction: RotateDirection) {
-        if (mode == Mode.ROTATE && !playerHasWon) {
+        if (mode == Mode.ROTATE && !playerHasWon && players[turnPlayer] !is AIPlayer) {
             board[subtileX][subtileY].rotate(direction)
             mode = Mode.PUT
             connection.rotateSubtile(subtileX, subtileY, direction)
@@ -60,12 +63,15 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         turnPlayer += 1
         turnPlayer %= players.size
         connection.setTurnPlayer(players[turnPlayer])
+        if (players[turnPlayer] is AIPlayer) {
+            (players[turnPlayer] as AIPlayer).turn(this)
+        }
     }
 
     object NoPlayer : Player()
 
     //Returns NoPlayer if the game is not over yet.
-    //Returns null if the game is over, and no one won.
+    //Returns null if the game is over and no one won.
     fun testIfWon(): Player? {
         val allRotatedSubtiles = Array(width, {
             Array(height, {

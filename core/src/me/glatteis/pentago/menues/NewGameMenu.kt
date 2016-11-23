@@ -5,18 +5,17 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.List
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
-import me.glatteis.pentago.Pentago
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.connection.LocalConnector
 import me.glatteis.pentago.generateRandomColor
 import me.glatteis.pentago.gui.*
+import me.glatteis.pentago.logic.AIPlayer
 import me.glatteis.pentago.logic.GameLogic
 import me.glatteis.pentago.logic.Player
 import java.util.*
@@ -32,7 +31,6 @@ class NewGameMenu : MenuStage() {
         val titleStyle = Label.LabelStyle(Textures.vanadineBig, Color.BLACK)
         val labelStyle = Label.LabelStyle(Textures.montserratMedium, Color.BLACK)
         val smallLabelStyle = Label.LabelStyle(Textures.montserratSmall, Color.BLACK)
-        val buttonStyle = Button.ButtonStyle()
         val textFieldStyle = TextField.TextFieldStyle()
 
         val title = Label("NEW GAME", titleStyle)
@@ -59,14 +57,24 @@ class NewGameMenu : MenuStage() {
         addActor(playerTypeBox)
 
         val addPlayer = PentagoLabelButton("Add Player", smallLabelStyle)
-        addPlayer.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                val playerName = playerTypeBox.text
-                if (playerName.isBlank()) return
-                playerTypeBox.text = ""
-                val player = Player(generateRandomColor(Color.WHITE), playerName)
-                players.add(player)
+        val addAI = PentagoLabelButton("Add AI", smallLabelStyle)
+        val listener = object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                if (playerTypeBox.text.isBlank()) return
 
+                val playerName: String
+                val player: Player
+
+                if (event.listenerActor == addPlayer) {
+                    playerName = playerTypeBox.text.trim()
+                    player = Player(generateRandomColor(Color.WHITE), playerName)
+                } else {
+                    playerName = playerTypeBox.text.trim() + " [BOT]"
+                    player = AIPlayer(generateRandomColor(Color.WHITE), playerName)
+                }
+
+                playerTypeBox.text = ""
+                players.add(player)
 
                 val group = Table()
                 group.width = 2000F
@@ -86,9 +94,13 @@ class NewGameMenu : MenuStage() {
 
                 playerTable.add(group).row()
             }
-        })
-        addPlayer.setPosition(0F, 300F, Align.center)
+        }
+        addPlayer.addListener(listener)
+        addAI.addListener(listener)
+        addPlayer.setPosition(-500F, 300F, Align.center)
+        addAI.setPosition(500F, 300F, Align.center)
         addActor(addPlayer)
+        addActor(addAI)
 
         val scrollPane = ScrollPane(playerTable)
         scrollPane.width = 2000F
@@ -156,7 +168,6 @@ class NewGameMenu : MenuStage() {
         playButton.setPosition(1000F, -800F, Align.right)
         addActor(playButton)
     }
-
 
 
 }

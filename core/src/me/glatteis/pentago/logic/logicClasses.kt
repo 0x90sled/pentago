@@ -59,6 +59,8 @@ open class Player(val color: Color, val name: String) {
     constructor() : this(Color(), "")
 }
 
+
+
 enum class RotateDirection {
     CLOCKWISE, COUNTERCLOCKWISE
 }
