@@ -16,10 +16,15 @@ class Subtile(val width: Int) {
     })
 
     var rotationInDegrees = 0
+    set(value) {
+        field = value
+        //updateRotated()
+    }
 
     fun rotate(direction: RotateDirection) {
         rotationInDegrees += if (direction == RotateDirection.CLOCKWISE) -90 else 90
         rotationInDegrees = floorMod(rotationInDegrees, 360)
+        //updateRotated()
     }
 
     fun rotated(): Array<Array<Chip>> {
@@ -30,7 +35,7 @@ class Subtile(val width: Int) {
         })
         for (i in board.indices) {
             for (j in board.indices) {
-                when(rotationInDegrees) {
+                when(floorMod(rotationInDegrees, 360)) {
                     0 -> newBoard[i][j] = board[i][j]
                     90 -> newBoard[i][j] = board[j][board.size - 1 - i]
                     180 -> newBoard[i][j] = board[board.size - 1 - i][board.size - 1 - j]
@@ -40,6 +45,15 @@ class Subtile(val width: Int) {
         }
         return newBoard
     }
+
+    /*
+    var rotated: Array<Array<Chip>> = board
+
+    private fun updateRotated() {
+
+        rotated = newBoard
+    }
+    */
 
 }
 
@@ -58,8 +72,6 @@ open class Player(val color: Color, val name: String) {
     //Empty constructor for packets
     constructor() : this(Color(), "")
 }
-
-
 
 enum class RotateDirection {
     CLOCKWISE, COUNTERCLOCKWISE

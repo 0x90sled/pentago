@@ -29,8 +29,8 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         }
     }
 
-    fun handleInput(subtileX: Int, subtileY: Int, tileXRelative: Int, tileYRelative: Int) {
-        if (mode == Mode.PUT && !playerHasWon && players[turnPlayer] !is AIPlayer) {
+    fun handleInput(subtileX: Int, subtileY: Int, tileXRelative: Int, tileYRelative: Int, isAI: Boolean = false) {
+        if (mode == Mode.PUT && !playerHasWon && (players[turnPlayer] !is AIPlayer || isAI)) {
             if (board[subtileX][subtileY].board[tileXRelative][tileYRelative] != NoChip) return
             val newChip = Chip(players[turnPlayer])
             board[subtileX][subtileY].board[tileXRelative][tileYRelative] = newChip
@@ -44,8 +44,8 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         }
     }
 
-    fun handleTurn(subtileX: Int, subtileY: Int, direction: RotateDirection) {
-        if (mode == Mode.ROTATE && !playerHasWon && players[turnPlayer] !is AIPlayer) {
+    fun handleTurn(subtileX: Int, subtileY: Int, direction: RotateDirection, isAI: Boolean = false) {
+        if (mode == Mode.ROTATE && !playerHasWon && (players[turnPlayer] !is AIPlayer || isAI)) {
             board[subtileX][subtileY].rotate(direction)
             mode = Mode.PUT
             connection.rotateSubtile(subtileX, subtileY, direction)
