@@ -42,7 +42,7 @@ object MainMenu : MenuStage() {
         val options = PentagoLabelButton("Licenses", labelStyle)
         options.listener = (object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                PentagoCore.instance.screen = OptionsMenu()
+                PentagoCore.instance.screen = CreditsMenu()
             }
         })
         options.setPosition(0F, -400F, Align.center)

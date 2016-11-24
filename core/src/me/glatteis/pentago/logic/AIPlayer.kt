@@ -173,7 +173,6 @@ class AIPlayer(color: Color, name: String) : Player(color, name) {
             val factor = if (player == this) 2 else -1
             if (count == 5) {
                 value += (Int.MAX_VALUE / 2) * factor
-                println("${player.name} could win! Give it a $value")
             } else {
                 value += count * factor
             }

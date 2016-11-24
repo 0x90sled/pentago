@@ -17,7 +17,7 @@ import javax.swing.plaf.synth.ColorType
 /**
  * Created by Linus on 30.07.2016!
  */
-class OptionsMenu : MenuStage() {
+class CreditsMenu : MenuStage() {
 
     val text =
             """
@@ -35,6 +35,11 @@ TITLE FONT
 FONT FOR EVERYTHING ELSE
 "Montserrat": Font by Julieta Ulanovsky, released under SIL Open Font License, 1.1
 http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+
+SOUNDS
+All sounds are from freesound.org and were modified by me.
+Marble Drop: http://freesound.org/people/lsprice/sounds/89812/ | "md09.aif" by lsprice
+Sliding: http://freesound.org/people/LG/sounds/72668/ | "Sliding 03.wav" by LG
 
 -- THIS GAME WAS CREATED USING --
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.Interpolation
@@ -32,6 +33,9 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
             GUISubtile(tileWidth)
         })
     })
+
+
+    val slideSound: Sound = Gdx.audio.newSound(Gdx.files.internal("sound/slide.wav"))
 
     val playerList = Table()
 
@@ -94,6 +98,7 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
     fun rotateSubtile(x: Int, y: Int, direction: RotateDirection) {
         val subtile = subtiles[x][y]
         val degrees = if (direction == RotateDirection.CLOCKWISE) -90F else 90F
+        slideSound.play()
         subtile.addAction(Actions.rotateBy(degrees, 1F, Interpolation.pow2))
     }
 

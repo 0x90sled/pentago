@@ -1,5 +1,7 @@
 package me.glatteis.pentago.gui
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -18,6 +20,7 @@ class GUISubtile(val slotWidth: Int) : Actor() {
     var thisX = 0
     var thisY = 0
 
+    val putSound: Sound = Gdx.audio.newSound(Gdx.files.internal("sound/put.wav"))
 
     val displayedGUIChips = Array(slotWidth, {
         Array<GUIChip>(slotWidth, {
@@ -92,8 +95,7 @@ class GUISubtile(val slotWidth: Int) : Actor() {
         shapeRenderer.translate(position.x, position.y, 0F)
         shapeRenderer.rotate(0F, 0F, 1F, rotation)
 
-        shapeRenderer.roundedRect(-(pixelWidth / 2), -(pixelWidth / 2), pixelWidth, pixelWidth, GUIConstants.chipRadius
-                )
+        shapeRenderer.roundedRect(-(pixelWidth / 2), -(pixelWidth / 2), pixelWidth, pixelWidth, GUIConstants.chipRadius)
 
         for (chips in displayedGUIChips.indices) for (chip in displayedGUIChips[0].indices) {
             val thisChip = displayedGUIChips[chips][chip]
@@ -114,6 +116,7 @@ class GUISubtile(val slotWidth: Int) : Actor() {
     }
 
     fun addDisplayedGUIChip(x: Int, y: Int, chip: GUIChip) {
+        putSound.play()
         displayedGUIChips[x][y] = chip
     }
 
