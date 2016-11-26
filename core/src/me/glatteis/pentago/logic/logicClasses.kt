@@ -16,45 +16,33 @@ class Subtile(val width: Int) {
     })
 
     var rotationInDegrees = 0
-    set(value) {
-        field = value
-        //updateRotated()
-    }
 
     fun rotate(direction: RotateDirection) {
         rotationInDegrees += if (direction == RotateDirection.CLOCKWISE) -90 else 90
         rotationInDegrees = floorMod(rotationInDegrees, 360)
-        //updateRotated()
     }
 
-    fun rotated(): Array<Array<Chip>> {
-        val newBoard = Array(width, {
-            Array<Chip>(width, {
-                NoChip
-            })
-        })
-        for (i in board.indices) {
-            for (j in board.indices) {
-                when(floorMod(rotationInDegrees, 360)) {
-                    0 -> newBoard[i][j] = board[i][j]
-                    90 -> newBoard[i][j] = board[j][board.size - 1 - i]
-                    180 -> newBoard[i][j] = board[board.size - 1 - i][board.size - 1 - j]
-                    270 -> newBoard[i][j] = board[board.size - 1 - j][i]
-                }
-            }
-        }
-        return newBoard
+    val cos = mapOf(
+            Pair(0, 1),
+            Pair(90, 0),
+            Pair(180, -1),
+            Pair(270, 0)
+    )
+
+    val sin = mapOf(
+            Pair(0, 0),
+            Pair(90, 1),
+            Pair(180, 0),
+            Pair(270, -1)
+    )
+
+    fun getRotated(x: Int, y: Int): Chip {
+        val xRotated = ((x - 1) * cos[rotationInDegrees]!! -
+                (y - 1) * sin[rotationInDegrees]!!) + 1
+        val yRotated = ((y - 1) * cos[rotationInDegrees]!! -
+                (x - 1) * sin[rotationInDegrees]!!) + 1
+        return board[xRotated][yRotated]
     }
-
-    /*
-    var rotated: Array<Array<Chip>> = board
-
-    private fun updateRotated() {
-
-        rotated = newBoard
-    }
-    */
-
 }
 
 

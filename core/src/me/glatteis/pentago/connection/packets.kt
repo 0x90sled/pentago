@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.esotericsoftware.kryonet.EndPoint
 import me.glatteis.pentago.gui.GUIChip
 import me.glatteis.pentago.gui.NoGUIChip
+import me.glatteis.pentago.logic.AIPlayer
 import me.glatteis.pentago.logic.Player
 import me.glatteis.pentago.logic.RotateDirection
 import java.util.*
@@ -65,7 +66,7 @@ object PacketRegistrar {
         val classes = listOf(AddDisplayedGUIChip::class.java, SetTurnPlayer::class.java, RotateSubtile::class.java,
                 DisplayGameWon::class.java, LetsGo::class.java, HandleInput::class.java, HandleTurn::class.java,
                 WhatsYourName::class.java, MyNameIs::class.java, RotateDirection::class.java, Color::class.java,
-                Player::class.java, UUID::class.java, Array<Player>::class.java)
+                Player::class.java, UUID::class.java, Array<Player>::class.java, AIPlayer::class.java)
         for (c in classes) {
             kryo.register(c)
         }

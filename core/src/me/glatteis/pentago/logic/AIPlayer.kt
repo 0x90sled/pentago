@@ -12,15 +12,13 @@ import kotlin.concurrent.thread
  */
 class AIPlayer(color: Color, name: String) : Player(color, name) {
 
-    val horizon = 2
-    val timer = Timer()
-    var thisPlayer = 0
+    constructor(): this(Color(), "")
 
-    var enemyMoves = 0
+    var thisPlayer = 0
 
     //Get the "best" turn using the minimax algorithm
     fun turn(gameLogic: GameLogic) {
-        enemyMoves = 0
+        val timer = Timer()
         thisPlayer = gameLogic.players.indexOf(this)
         val elapsedTime = System.currentTimeMillis()
         thread {
@@ -100,7 +98,6 @@ class AIPlayer(color: Color, name: String) : Player(color, name) {
                     for (cSpin in 0..board[0].size - 1) {
                         for (spinDirection in listOf(RotateDirection.CLOCKWISE, RotateDirection.COUNTERCLOCKWISE)) {
                             board[rSpin][cSpin].rotate(spinDirection)
-                            enemyMoves++
 
                             val value = value(board)
 
@@ -127,24 +124,12 @@ class AIPlayer(color: Color, name: String) : Player(color, name) {
     fun value(board: Array<Array<Subtile>>): Int {
         val width = board.size
         val height = board[0].size
-        val allRotatedSubtiles = Array(width, {
-            Array(height, {
-                Array(tileWidth, {
-                    Array<Chip>(tileWidth, {
-                        NoChip
-                    })
-                })
-            })
-        })
-        for (a in 0..width - 1) for (b in 0..height - 1) {
-            allRotatedSubtiles[a][b] = board[a][b].rotated()
-        }
 
         val maxCounts = HashMap<Player, Int>()
 
         for (r in 0..width - 1) for (h in 0..height - 1) {
             for (x in 0..tileWidth - 1) for (y in 0..tileWidth - 1) {
-                val chip = allRotatedSubtiles[r][h][x][y]
+                val chip = board[r][h].getRotated(x, y)
                 if (chip.player == null) continue
                 val player = chip.player
                 for (i in -1..1) {
@@ -155,8 +140,8 @@ class AIPlayer(color: Color, name: String) : Player(color, name) {
                         if (i == 0 && j == 0) continue
                         while (locationX / tileWidth < width && locationY / tileWidth < height &&
                                 locationX >= 0 && locationY >= 0 &&
-                                allRotatedSubtiles[locationX / tileWidth][locationY / tileWidth]
-                                        [locationX % tileWidth][locationY % tileWidth].player == player) {
+                                board[locationX / tileWidth][(locationY / tileWidth)]
+                                        .getRotated(locationX % tileWidth, locationY % tileWidth).player == player) {
                             locationX += i
                             locationY += j
                             count++

@@ -1,7 +1,6 @@
 package me.glatteis.pentago.logic
 
 import me.glatteis.pentago.PentagoCore
-import me.glatteis.pentago.connection.Connection
 import me.glatteis.pentago.connection.LocalConnector
 import me.glatteis.pentago.gui.GUIChip
 
@@ -73,22 +72,10 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
     //Returns NoPlayer if the game is not over yet.
     //Returns null if the game is over and no one won.
     fun testIfWon(): Player? {
-        val allRotatedSubtiles = Array(width, {
-            Array(height, {
-                Array(tileWidth, {
-                    Array<Chip>(tileWidth, {
-                        NoChip
-                    })
-                })
-            })
-        })
-        for (a in 0..width - 1) for (b in 0..height - 1) {
-            allRotatedSubtiles[a][b] = board[a][b].rotated()
-        }
         var occupiedChips = 0
         for (r in 0..width - 1) for (h in 0..height - 1) {
             for (x in 0..tileWidth - 1) for (y in 0..tileWidth - 1) {
-                val chip = allRotatedSubtiles[r][h][x][y]
+                val chip = board[r][h].getRotated(x, y)
                 if (chip.player == null) continue
                 occupiedChips++
                 val player = chip.player
@@ -100,8 +87,8 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
                         if (i == 0 && j == 0) continue
                         while (locationX / tileWidth < width && locationY / tileWidth < height &&
                                 locationX >= 0 && locationY >= 0 &&
-                                allRotatedSubtiles[locationX / tileWidth][locationY / tileWidth]
-                                        [locationX % tileWidth][locationY % tileWidth].player == player) {
+                                board[locationX / tileWidth][(locationY / tileWidth)]
+                                        .getRotated(locationX % tileWidth, locationY % tileWidth).player == player) {
                             locationX += i
                             locationY += j
                             count++
@@ -117,6 +104,7 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         return NoPlayer
     }
 
+    /*
     fun printString() {
         for (i in board.indices) {
             for (j in board[0].indices) {
@@ -132,5 +120,6 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
             }
         }
     }
+    */
 
 }
