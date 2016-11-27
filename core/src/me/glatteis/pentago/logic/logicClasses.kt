@@ -37,12 +37,12 @@ class Subtile(val width: Int) {
     )
 
     fun getRotated(x: Int, y: Int): Chip {
-        val xRotated = ((x - 1) * cos[rotationInDegrees]!! -
-                (y - 1) * sin[rotationInDegrees]!!) + 1
-        val yRotated = ((y - 1) * cos[rotationInDegrees]!! -
-                (x - 1) * sin[rotationInDegrees]!!) + 1
-        return board[xRotated][yRotated]
+        val s = -sin[rotationInDegrees]!!
+        val c = -cos[rotationInDegrees]!!
+        return board[(1 - x) * c - (1 - y) * s + 1][(1 - x) * s + (1 - y) * c + 1]
     }
+
+
 }
 
 

@@ -3,6 +3,7 @@ package me.glatteis.pentago.logic
 import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.connection.LocalConnector
 import me.glatteis.pentago.gui.GUIChip
+import java.util.*
 
 /**
  * Created by Linus on 21.07.2016!
@@ -35,11 +36,7 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
             board[subtileX][subtileY].board[tileXRelative][tileYRelative] = newChip
             connection.addDisplayedGUIChip(subtileX, subtileY, tileXRelative, tileYRelative, GUIChip.fromChip(newChip))
             mode = Mode.ROTATE
-            val playerThatWon = testIfWon()
-            if (playerThatWon != NoPlayer) {
-                playerHasWon = true
-                connection.displayGameWon(playerThatWon)
-            }
+            isGameOver()
         }
     }
 
@@ -48,12 +45,7 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
             board[subtileX][subtileY].rotate(direction)
             mode = Mode.PUT
             connection.rotateSubtile(subtileX, subtileY, direction)
-            val playerThatWon = testIfWon()
-            if (playerThatWon != NoPlayer) {
-                playerHasWon = true
-                connection.displayGameWon(playerThatWon)
-                return
-            }
+            if (isGameOver()) return
             newTurn()
         }
     }
@@ -67,11 +59,26 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         }
     }
 
-    object NoPlayer : Player()
+    fun isGameOver(): Boolean {
+        val playersThatWon = testIfWon()
+        if (playersThatWon == null) {
+            connection.displayGameWon(null)
+            return true
+        }
+        if (playersThatWon.isNotEmpty()) {
+            playerHasWon = true
+            for (p in playersThatWon) {
+                connection.displayGameWon(p)
+            }
+            return true
+        }
+        return false
+    }
 
-    //Returns NoPlayer if the game is not over yet.
+    //Returns an empty list if the game is not over yet.
     //Returns null if the game is over and no one won.
-    fun testIfWon(): Player? {
+    fun testIfWon(): List<Player>? {
+        val playersThatWon = ArrayList<Player>()
         var occupiedChips = 0
         for (r in 0..width - 1) for (h in 0..height - 1) {
             for (x in 0..tileWidth - 1) for (y in 0..tileWidth - 1) {
@@ -93,7 +100,9 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
                             locationY += j
                             count++
                         }
-                        if (count == pointsToWin) return player
+                        if (count == pointsToWin) {
+                            playersThatWon.add(player)
+                        }
                     }
                 }
             }
@@ -101,25 +110,28 @@ class GameLogic(val tileWidth: Int, val width: Int, val height: Int, val players
         if (occupiedChips == width * height * 3 * 3) {
             return null
         }
-        return NoPlayer
+        return playersThatWon
     }
 
-    /*
-    fun printString() {
-        for (i in board.indices) {
-            for (j in board[0].indices) {
-                println("$i $j")
-                val subtile = board[i][j]
-                for (sub in subtile.rotated()) {
-                    for (chip in sub) {
-                        if (chip.player == null) print("*")
-                        else print(chip.player.color.toString()[0])
-                    }
-                    println()
+    fun printBoard(board: Array<Array<Subtile>>) {
+        for (y in 0..board[0].size * 3 - 1) {
+            println()
+            if (y % 3 == 0) {
+                for (x in 0..board.size * 3 - 1) {
+                    print(board[x / 3][y / 3].rotationInDegrees)
+                    print(" ")
+                }
+                println()
+            }
+            for (x in 0..board.size * 3 - 1) {
+                if (x % 3 == 0) print(" ")
+                val s = board[x / 3][y / 3].getRotated(x % 3, y % 3)
+                if (s == NoChip) {
+                    print(".")
+                } else {
+                    print(s.player!!.color.toString()[0])
                 }
             }
         }
     }
-    */
-
 }

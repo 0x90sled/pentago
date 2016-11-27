@@ -116,7 +116,6 @@ class LocalConnector : Connector {
 
     fun setTurnPlayer(player: Player) {
         PentagoCore.board.setTurnColor(player.color)
-        PentagoCore.board.selectPlayer(player)
     }
 
     fun rotateSubtile(subtileX: Int, subtileY: Int, direction: RotateDirection) {
@@ -150,7 +149,6 @@ class ClientConnector() : Connector {
                         is SetTurnPlayer -> {
                             postRunnable {
                                 PentagoCore.board.setTurnColor(player.color)
-                                PentagoCore.board.selectPlayer(player)
                             }
                         }
                         is RotateSubtile -> {

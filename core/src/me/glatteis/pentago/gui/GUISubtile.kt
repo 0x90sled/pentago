@@ -32,7 +32,7 @@ class GUISubtile(val slotWidth: Int) : Actor() {
     val pixelShift = (slotWidth / 2) * (GUIConstants.chipRadius  * 2 + GUIConstants.chipGap )
 
     fun tap(screenX: Float, screenY: Float, count: Int, button: Int): Boolean {
-        val coords = screenToLocalCoordinates(Vector2(screenX.toFloat(), screenY.toFloat()))
+        val coords = screenToLocalCoordinates(Vector2(screenX, screenY))
         if (Math.abs(coords.x) < pixelWidth / 2 && Math.abs(coords.y) < pixelWidth / 2) {
             var x = coords.x + pixelShift
             var y = coords.y + pixelShift
@@ -41,7 +41,8 @@ class GUISubtile(val slotWidth: Int) : Actor() {
             val roundedX = Math.round(x)
             val roundedY = Math.round(y)
             if (roundedX >= 0 && roundedY >= 0 && roundedX < slotWidth && roundedY < slotWidth) {
-                PentagoCore.connector.handleInput(thisX, thisY, roundedX, roundedY)
+                //It's {2 - roundedY} because array labeling and scene2d labeling is inverted in y direction
+                PentagoCore.connector.handleInput(thisX, thisY, roundedX, 2 - roundedY)
                 return true
             }
         }
@@ -49,7 +50,7 @@ class GUISubtile(val slotWidth: Int) : Actor() {
     }
 
     fun touchRotation(screenX: Float, screenY: Float, deltaX: Float, deltaY: Float): RotateDirection? {
-        val coords = screenToLocalCoordinates(Vector2(screenX.toFloat(), screenY.toFloat())).rotate(rotation)
+        val coords = screenToLocalCoordinates(Vector2(screenX, screenY)).rotate(rotation)
         //Apparently screenToLocalCoordinates does not take the rotation in count. It only took me 2 hours to
         //figure that out and I thought it was something wrong with the math below this comment!
         if (Math.abs(coords.x) < pixelWidth / 2 && Math.abs(coords.y) < pixelWidth / 2) {
@@ -98,7 +99,8 @@ class GUISubtile(val slotWidth: Int) : Actor() {
         shapeRenderer.roundedRect(-(pixelWidth / 2), -(pixelWidth / 2), pixelWidth, pixelWidth, GUIConstants.chipRadius)
 
         for (chips in displayedGUIChips.indices) for (chip in displayedGUIChips[0].indices) {
-            val thisChip = displayedGUIChips[chips][chip]
+            //It's {2 - chip} because array labeling and scene2d labeling is inverted in y direction
+            val thisChip = displayedGUIChips[chips][2 - chip]
             if (thisChip == NoGUIChip) {
                 shapeRenderer.color = Color.DARK_GRAY
             } else {

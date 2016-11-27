@@ -79,14 +79,15 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
         addActor(scroller)
 
         for (x in subtiles.indices) for (y in subtiles[0].indices) {
-            val subtile = subtiles[x][y]
+            //It's {height - 1 - y} because array labeling and scene2d labeling is inverted in y direction
+            val subtile = subtiles[x][height - 1 - y]
             subtile.thisX = x
-            subtile.thisY = y
+            subtile.thisY = height - 1 - y
             addActor(subtile)
-            subtile.setPosition(x * subtileWidth - pixelWidth / 2 + subtileWidth / 2 - sidebarWidth / 2
-                    + if (x == 0) 0 else GUIConstants.subtileGap * x,
-                    y * subtileWidth - pixelHeight / 2 + subtileWidth / 2
-                            + if (y == 0) 0 else GUIConstants.subtileGap * y)
+            subtile.setPosition(
+                    x * subtileWidth - pixelWidth / 2 + subtileWidth / 2 - sidebarWidth / 2 + GUIConstants.subtileGap * x,
+                    y * subtileWidth - pixelHeight / 2 + subtileWidth / 2 + GUIConstants.subtileGap * y
+            )
             subtile.setOrigin(subtile.width / 2, subtile.height / 2)
         }
 
@@ -102,10 +103,7 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
         subtile.addAction(Actions.rotateBy(degrees, 1F, Interpolation.pow2))
     }
 
-    fun selectPlayer(player: Player) {
-
-    }
-
+    var alreadyReturned = false
     fun displayGameWon(player: Player?) {
         setTurnColor(Color.valueOf("FFFFFF"))
         if (player != null) {
@@ -116,7 +114,14 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
                     }
                 }
             }
+            if (!alreadyReturned) {
+                returnToMainMenu()
+                alreadyReturned = true
+            }
         }
+    }
+
+    private fun returnToMainMenu() {
         val timer = Timer()
         timer.scheduleTask(object : Timer.Task() {
             override fun run() {
@@ -125,7 +130,6 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
             }
         }, 4F)
     }
-
 
     override fun show() {
         Gdx.input.inputProcessor = multiplexer
