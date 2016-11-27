@@ -8,7 +8,6 @@ import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.Interpolation
-import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -21,12 +20,12 @@ import me.glatteis.pentago.PentagoCore
 import me.glatteis.pentago.logic.Player
 import me.glatteis.pentago.logic.RotateDirection
 import me.glatteis.pentago.menues.MenuStage
-import me.glatteis.pentago.menues.NewGameMenu
 
 /**
  * Created by Linus on 21.07.2016!
  */
-class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: MenuStage, val players: Array<Player>) : Stage(), Screen {
+open class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: MenuStage, val players: Array<Player>) :
+        Stage(), Screen {
 
     val subtiles = Array(width, {
         Array(height, {
@@ -76,14 +75,14 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
         scroller.setPosition(0F, -pixelHeight / 2)
         scroller.setOrigin(Align.center)
         scroller.rotateBy(-90F)
-        addActor(scroller)
+        super.addActor(scroller)
 
         for (x in subtiles.indices) for (y in subtiles[0].indices) {
             //It's {height - 1 - y} because array labeling and scene2d labeling is inverted in y direction
             val subtile = subtiles[x][height - 1 - y]
             subtile.thisX = x
             subtile.thisY = height - 1 - y
-            addActor(subtile)
+            super.addActor(subtile)
             subtile.setPosition(
                     x * subtileWidth - pixelWidth / 2 + subtileWidth / 2 - sidebarWidth / 2 + GUIConstants.subtileGap * x,
                     y * subtileWidth - pixelHeight / 2 + subtileWidth / 2 + GUIConstants.subtileGap * y
@@ -115,13 +114,13 @@ class Board(val tileWidth: Int, val width: Int, val height: Int, val oldMenu: Me
                 }
             }
             if (!alreadyReturned) {
-                returnToMainMenu()
+                returnToMenu()
                 alreadyReturned = true
             }
         }
     }
 
-    private fun returnToMainMenu() {
+    protected fun returnToMenu() {
         val timer = Timer()
         timer.scheduleTask(object : Timer.Task() {
             override fun run() {

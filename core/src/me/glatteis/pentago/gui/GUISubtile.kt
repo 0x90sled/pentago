@@ -51,7 +51,7 @@ class GUISubtile(val slotWidth: Int) : Actor() {
 
     fun touchRotation(screenX: Float, screenY: Float, deltaX: Float, deltaY: Float): RotateDirection? {
         val coords = screenToLocalCoordinates(Vector2(screenX, screenY)).rotate(rotation)
-        //Apparently screenToLocalCoordinates does not take the rotation in count. It only took me 2 hours to
+        //Apparently screenToLocalCoordinates does not take the rotation into account. It only took me 2 hours to
         //figure that out and I thought it was something wrong with the math below this comment!
         if (Math.abs(coords.x) < pixelWidth / 2 && Math.abs(coords.y) < pixelWidth / 2) {
             val dir = Vector2(deltaX, deltaY).nor()

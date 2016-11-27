@@ -31,7 +31,7 @@ object MainMenu : MenuStage() {
         addActor(newGame)
 
         val joinNetworkGame = PentagoLabelButton("Join Network Game", labelStyle)
-        joinNetworkGame.setPosition(0F, 0F, Align.center)
+        joinNetworkGame.setPosition(0F, 150F, Align.center)
         joinNetworkGame.listener = (object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 PentagoCore.instance.screen = ConnectMenu()
@@ -39,13 +39,22 @@ object MainMenu : MenuStage() {
         })
         addActor(joinNetworkGame)
 
+        val tutorial = PentagoLabelButton("Tutorial", labelStyle)
+        tutorial.setPosition(0F, -100F, Align.center)
+        tutorial.listener = (object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                PentagoCore.instance.screen = Tutorial()
+            }
+        })
+        addActor(tutorial)
+
         val options = PentagoLabelButton("Licenses", labelStyle)
         options.listener = (object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 PentagoCore.instance.screen = CreditsMenu()
             }
         })
-        options.setPosition(0F, -400F, Align.center)
+        options.setPosition(0F, -350F, Align.center)
         
         addActor(options)
     }
